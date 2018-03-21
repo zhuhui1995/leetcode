@@ -1,0 +1,102 @@
+package stackmax;
+class MyStack {
+    private int[] myStack;
+    private int top;
+    private MyStack MaxValue;
+    public MyStack(){
+        this(true);
+    }
+    private MyStack(boolean needchild){
+        if(needchild){
+            myStack = new  int[100];
+            top = 0;
+            MaxValue = new MyStack(false);
+        }else {
+            myStack = new  int[100];
+            top = 0;
+        }
+    }
+    public boolean ifempty(){
+        if(top==0){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public int peek(){
+        if(ifempty()){
+            //throw new RuntimeException();
+        	return -100;
+        }
+        else {
+            return myStack[top-1];
+        }
+    }
+    public int pop(){
+        if(ifempty()){
+            throw new RuntimeException();
+        }
+        else {
+            top--;
+            if(MaxValue!=null) {
+            	if(myStack[top]==MaxValue.peek()) {
+            		MaxValue.pop();
+            	}
+            }
+            return myStack[top];
+        }
+    }
+    public boolean push(int data){
+        if(top==100){
+            throw new RuntimeException();
+        }
+        else {
+            myStack[top]=data;
+            top++;
+            if(MaxValue!=null)
+            {
+                if(MaxValue.ifempty()){
+                    MaxValue.push(data);
+                }
+                else {
+                    if(data>=MaxValue.peek()){
+                        MaxValue.push(data);
+                    }
+                }
+            }
+            return true;
+        }
+    }
+    public void clean(){
+        top=0;
+    }
+    public int getMaxValue(){
+        if(MaxValue!=null){
+            return MaxValue.peek();
+        }
+        else {
+            return 0;
+        }
+    }
+
+}
+
+public class maxtestdemo {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		 MyStack a = new MyStack();
+		 a.push(0);
+		 a.push(1);
+		 a.push(3);
+		 a.push(2);
+		 a.push(3);
+		 System.out.println(a.getMaxValue());
+		 a.pop();
+		 System.out.println(a.getMaxValue());
+		 a.pop();	 a.pop();
+		 System.out.println(a.getMaxValue());
+	}
+
+}
